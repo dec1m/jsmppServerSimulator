@@ -13,29 +13,35 @@ import java.io.IOException;
 import java.util.Date;
 
 
-public class Client  {
+public class Client   {
 
     private static final TimeFormatter TIME_FORMATTER = new AbsoluteTimeFormatter();
+    static String message = getMsg();
+    private static byte[] empty_arr = new byte[0];
     public static void main(String[] args) {
         SMPPSession session = new SMPPSession();
 
         try {
 
+            OptionalParameter payload  =
+                    new OptionalParameter.Message_payload(message.getBytes());
 
-            String systemId = session.connectAndBind("localhost", 8081, new BindParameter(BindType.BIND_TRX,
+
+
+            String systemId = session.connectAndBind("localhost", 8081, new BindParameter(BindType.BIND_TX,
                     "test", "test", "cp", TypeOfNumber.UNKNOWN, NumberingPlanIndicator.UNKNOWN,
                     null));
 
-            String msg = " >> My test message ";
-            for (int i = 0; i < 100; i++) {
+
+
                 session.submitShortMessage("CMT",
                         TypeOfNumber.UNKNOWN, NumberingPlanIndicator.UNKNOWN, "1",
                         TypeOfNumber.UNKNOWN, NumberingPlanIndicator.UNKNOWN, "2",
                         new ESMClass(), (byte)0, (byte)1,  TIME_FORMATTER.format(new Date()), null,
                         new RegisteredDelivery(SMSCDeliveryReceipt.DEFAULT), (byte)0, new GeneralDataCoding(Alphabet.ALPHA_DEFAULT, MessageClass.CLASS1, false), (byte)0,
-                        msg.getBytes());
-                Thread.sleep(2000);
-            }
+                        empty_arr,payload);
+
+
 
             session.unbindAndClose();
 
@@ -49,9 +55,15 @@ public class Client  {
             e.printStackTrace();
         } catch (PDUException e) {
             e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
     }
+    private static String getMsg() {
+        StringBuilder msg = new StringBuilder();
+        for (int countSymbols = 0; countSymbols < 999; countSymbols++) {
+
+            msg.append("a");
+        }
+        return msg.toString() + "J";
+}
 
 }

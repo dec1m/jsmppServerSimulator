@@ -66,9 +66,12 @@ public class Server implements Runnable, ServerMessageReceiverListener {
     }
 
 
-    public MessageId onAcceptSubmitSm(SubmitSm submitSm, SMPPServerSession smppServerSession) throws ProcessRequestException {
-        MessageId messageId = messageIDGenerator.newMessageId();
-        logger.info("MSG = " + new String(submitSm.getShortMessage()) + "id  = " + messageId);
+        public MessageId onAcceptSubmitSm(SubmitSm submitSm, SMPPServerSession smppServerSession) throws ProcessRequestException {
+            MessageId messageId = messageIDGenerator.newMessageId();
+            OptionalParameter.Message_payload payload = (OptionalParameter.Message_payload) submitSm.getOptionalParameter(OptionalParameter.Tag.MESSAGE_PAYLOAD);
+        String valueAsString = payload.getValueAsString();
+
+        logger.info("id  = " + messageId + " Length = " +valueAsString.length()  +" MSG = " + valueAsString );
 
         return messageId;
     }
