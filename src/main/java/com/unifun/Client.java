@@ -14,7 +14,7 @@ import java.util.Date;
 
 
 public class Client   {
-
+   static  DeliverSm deliverSm;
     private static final TimeFormatter TIME_FORMATTER = new AbsoluteTimeFormatter();
     static String message = getMsg();
     private static byte[] empty_arr = new byte[0];
@@ -29,7 +29,7 @@ public class Client   {
 
 
             String systemId = session.connectAndBind("localhost", 8081, new BindParameter(BindType.BIND_TX,
-                    "test", "test", "cp", TypeOfNumber.UNKNOWN, NumberingPlanIndicator.UNKNOWN,
+                    "test", "test", null, TypeOfNumber.UNKNOWN, NumberingPlanIndicator.UNKNOWN,
                     null));
 
 
